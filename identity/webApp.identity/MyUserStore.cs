@@ -10,12 +10,19 @@ using System.Threading.Tasks;
 
 namespace webApp.identity
 {
-    public class MyUserStore : IUserStore<MyUser>
+    public class MyUserStore : IUserStore<MyUser>, IUserPasswordStore<MyUser>
     {
-
+        public Task<string> GetUserIdAsync(MyUser user, CancellationToken cancellationToken)
+        {
+            if(user.PasswordHash == null)
+            {
+                CreateAsync(user, cancellationToken);                                    
+            }
+            return Task.FromResult(user.Id);
+        }
         public static DbConnection GetOpenConnection()
         {
-            var connection = new SqlConnection("Server=COREI5\'SQLEXPRESS;Database=identityCurso;Integrated Security=True");
+            var connection = new SqlConnection("Server=localhost;Initial Catalog=identityCurso;Integrated Security=True");
             connection.Open();
             return connection;
         }
@@ -25,11 +32,11 @@ namespace webApp.identity
             using (var connection = GetOpenConnection())
             {
                 await connection.ExecuteAsync(
-                    "inser into dbo.Users([Id]," +
+                    "insert into Users([Id]," +
                     "[UserName]," +
                     "[NormalizedUserName]," +
                     "[PasswordHash]) " +
-                    "Valus(@id,@userName,@normalizedUserName,@passwordHash)",
+                    "Values(@id,@userName,@normalizedUserName,@passwordHash)",
                 new
                 {
                     id = user.Id,
@@ -61,8 +68,9 @@ namespace webApp.identity
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+
         }
+
 
         public async Task<MyUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
@@ -81,8 +89,7 @@ namespace webApp.identity
             {
                 return await connection.QueryFirstOrDefaultAsync<MyUser>(
                     "select * from Users where normalizedUserName = @name",
-                    new { nome = normalizedUserName }
-                    );
+                    new { name = normalizedUserName });
             }
         }
 
@@ -91,9 +98,9 @@ namespace webApp.identity
             return Task.FromResult(user.NormalizedUserName);
         }
 
-        public Task<string> GetUserIdAsync(MyUser user, CancellationToken cancellationToken)
+        public Task<string> GetPasswordHashAsync(MyUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Id);
+            return Task.FromResult(user.PasswordHash);
         }
 
         public Task<string> GetUserNameAsync(MyUser user, CancellationToken cancellationToken)
@@ -101,11 +108,22 @@ namespace webApp.identity
             return Task.FromResult(user.UserName);
         }
 
+        public Task<bool> HasPasswordAsync(MyUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash != null);
+        }
+
         public Task SetNormalizedUserNameAsync(MyUser user, string normalizedName, CancellationToken cancellationToken)
         {
             user.NormalizedUserName = normalizedName;
             return Task.CompletedTask;
 
+        }
+
+        public Task SetPasswordHashAsync(MyUser user, string passwordHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.CompletedTask;
         }
 
         public Task SetUserNameAsync(MyUser user, string userName, CancellationToken cancellationToken)
@@ -119,11 +137,11 @@ namespace webApp.identity
             using (var connection = GetOpenConnection())
             {
                 await connection.ExecuteAsync(
-                    "update dbo.Users " +
+                    "update Users " +
                     "set [Id] = @id," +
                     "[UserName] = @userName," +
                     "[NormalizedUserName] = @normalizedUserName," +
-                    "[PasswordHash] = @passwordHash, " +
+                    "[PasswordHash] = @passwordHash " +
                     "where [Id] = @id",
                     new
                     {
@@ -133,6 +151,7 @@ namespace webApp.identity
                         passwordHash = user.PasswordHash
                     });
             }
+
             return IdentityResult.Success;
         }
     }

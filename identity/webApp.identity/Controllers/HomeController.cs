@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,10 @@ namespace webApp.identity.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<MyUser> _userManager;
+        public HomeController(UserManager<MyUser> userManager)
         {
-            _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -24,6 +24,36 @@ namespace webApp.identity.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+
+                if (user == null)
+                {
+                    user = new MyUser()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserName = model.UserName
+                    };
+
+                    var result = await _userManager.CreateAsync(
+                       user, model.Password);
+                }
+
+                return View("Sucess");
+            }
+            return View();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Register()
         {
             return View();
         }
