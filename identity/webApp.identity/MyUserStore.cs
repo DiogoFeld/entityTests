@@ -12,6 +12,9 @@ namespace webApp.identity
 {
     public class MyUserStore : IUserStore<MyUser>, IUserPasswordStore<MyUser>
     {
+
+
+
         public Task<string> GetUserIdAsync(MyUser user, CancellationToken cancellationToken)
         {
             if(user.PasswordHash == null)

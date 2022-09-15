@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using webApp.identity.Models;
 
@@ -12,8 +14,8 @@ namespace webApp.identity.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UserManager<MyUser> _userManager;
-        public HomeController(UserManager<MyUser> userManager)
+        private readonly UserManager<IdentityUser> _userManager;
+        public HomeController(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -28,6 +30,36 @@ namespace webApp.identity.Controllers
             return View();
         }
 
+
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> LoginSucess(LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.userName);
+
+                if(user != null && await _userManager.CheckPasswordAsync(
+                     user, model.password))
+                {
+                    var identity = new ClaimsIdentity("cookies");
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                    identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                    await HttpContext.SignInAsync("cookies",new ClaimsPrincipal(identity));
+
+                    return RedirectToAction("About");
+                }
+                ModelState.AddModelError("", "Usuario ou senha invalida");
+            }
+            return View();    
+        }
+        
+
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
@@ -36,7 +68,7 @@ namespace webApp.identity.Controllers
 
                 if (user == null)
                 {
-                    user = new MyUser()
+                    user = new IdentityUser()
                     {
                         Id = Guid.NewGuid().ToString(),
                         UserName = model.UserName
