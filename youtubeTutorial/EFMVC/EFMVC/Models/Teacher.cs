@@ -10,7 +10,5 @@ namespace EFMVC.Models
         public int TeacherAge{ get; set; }
         public Subject Subject { get; set; } = new Subject();
 
-
-
     }
 }

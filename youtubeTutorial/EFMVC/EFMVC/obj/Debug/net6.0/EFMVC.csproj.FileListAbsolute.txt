@@ -58,7 +58,6 @@ C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\n
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\MessagePack.Annotations.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.AspNetCore.Razor.Language.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.Build.Locator.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.CodeAnalysis.AnalyzerUtilities.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.CodeAnalysis.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.CodeAnalysis.CSharp.dll
@@ -259,3 +258,6 @@ C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\n
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.Build.dll
+C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.Build.Framework.dll
+C:\Estudos Programação\entityFramework\youtubeTutorial\EFMVC\EFMVC\bin\Debug\net6.0\Microsoft.NET.StringTools.dll

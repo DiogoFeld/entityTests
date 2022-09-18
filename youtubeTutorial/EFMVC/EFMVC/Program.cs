@@ -1,4 +1,5 @@
 using EFMVC.Controllers;
+using EFMVC.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,9 @@ builder.Services.AddDbContext<MVCContextcs>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("EFConnection"));
 });
+
+builder.Services.AddScoped<ISubjectServices, SubjectServices>();
+
 
 var app = builder.Build();
 
